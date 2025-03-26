@@ -1,5 +1,8 @@
 name: Adjust notebook
-on: [push]
+
+on:
+  push:
+  workflow_dispatch:  # Enables manual execution of the workflow
 
 jobs:
   add_badges:
@@ -7,11 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 
-        id: checkout
         uses: actions/checkout@v2
 
       - name: Add/Update badges
-        id: badges
         uses: trsvchn/colab-badge-action@v4
         with:
           check: "all"
@@ -24,24 +25,22 @@ jobs:
         with:
           message: Add Colab badge
           push: true
+
   black:
     name: Black Check for Jupyter notebooks
     runs-on: ubuntu-latest
     steps: 
       - name: Checkout 
-        id: checkout
         uses: actions/checkout@v2
 
-      - name: black
+      - name: Run black check
         uses: jpetrucciani/black-check@master
         with:
           path: '.'
           black_flags: '--exclude ./env/'
-      
+
       - name: Add, commit, and push changes
         uses: EndBug/add-and-commit@v9
         with:
           message: black check
           push: true
-
-      
